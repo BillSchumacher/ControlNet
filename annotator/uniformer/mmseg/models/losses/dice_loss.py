@@ -92,8 +92,7 @@ class DiceLoss(nn.Module):
                 reduction_override=None,
                 **kwards):
         assert reduction_override in (None, 'none', 'mean', 'sum')
-        reduction = (
-            reduction_override if reduction_override else self.reduction)
+        reduction = reduction_override or self.reduction
         if self.class_weight is not None:
             class_weight = pred.new_tensor(self.class_weight)
         else:
@@ -106,7 +105,7 @@ class DiceLoss(nn.Module):
             num_classes=num_classes)
         valid_mask = (target != self.ignore_index).long()
 
-        loss = self.loss_weight * dice_loss(
+        return self.loss_weight * dice_loss(
             pred,
             one_hot_target,
             valid_mask=valid_mask,
@@ -115,5 +114,5 @@ class DiceLoss(nn.Module):
             smooth=self.smooth,
             exponent=self.exponent,
             class_weight=class_weight,
-            ignore_index=self.ignore_index)
-        return loss
+            ignore_index=self.ignore_index,
+        )

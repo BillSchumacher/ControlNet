@@ -181,18 +181,17 @@ class CrossEntropyLoss(nn.Module):
                 **kwargs):
         """Forward function."""
         assert reduction_override in (None, 'none', 'mean', 'sum')
-        reduction = (
-            reduction_override if reduction_override else self.reduction)
+        reduction = reduction_override or self.reduction
         if self.class_weight is not None:
             class_weight = cls_score.new_tensor(self.class_weight)
         else:
             class_weight = None
-        loss_cls = self.loss_weight * self.cls_criterion(
+        return self.loss_weight * self.cls_criterion(
             cls_score,
             label,
             weight,
             class_weight=class_weight,
             reduction=reduction,
             avg_factor=avg_factor,
-            **kwargs)
-        return loss_cls
+            **kwargs
+        )
