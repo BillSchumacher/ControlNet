@@ -21,7 +21,7 @@ class ImageLogger(Callback):
         self.clamp = clamp
         self.disabled = disabled
         self.log_on_batch_idx = log_on_batch_idx
-        self.log_images_kwargs = log_images_kwargs if log_images_kwargs else {}
+        self.log_images_kwargs = log_images_kwargs or {}
         self.log_first_step = log_first_step
 
     @rank_zero_only
